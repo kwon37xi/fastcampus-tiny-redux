@@ -1,0 +1,7 @@
+{
+    "name": "tiny-redux",
+    "version": "1.0.0",
+    "description": "Fastcampus tiny-redux",
+    "main": "index.js",
+    "type": "module"
+}
