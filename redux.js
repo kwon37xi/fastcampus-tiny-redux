@@ -3,7 +3,7 @@
 // 실제로 수정은 불가능하게 하고, 수정을 요청만 하게 한다. 수정은 한 곳에서만 일어난다.
 
 // updater : 상태를 수정하는 유일한 함수
-export function createStore(reducer) {
+export function createStore(reducer, middleware = []) {
   let state;
   const handlers = [];
 
@@ -22,9 +22,19 @@ export function createStore(reducer) {
   function subscribe(listener) {
     handlers.push(listener);
   }
-  return {
+
+  middleware = Array.from(middleware).reverse();
+
+  const store = {
     dispatch,
     getState,
     subscribe,
   };
+
+  let lastDispatch = dispatch;
+
+  middleware.forEach((m) => {
+    lastDispatch = m(store)(lastDispatch);
+  });
+  return { ...store, dispatch: lastDispatch };
 }
